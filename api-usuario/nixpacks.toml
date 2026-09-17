@@ -1,8 +1,5 @@
-[phases.setup]
-nixPkgs = ["python311"]
-
-[phases.install]
-cmds = ["python -m venv /opt/venv && . /opt/venv/bin/activate && pip install -r requirements.txt"]
-
+# Nixpacks detecta Python automaticamente por requirements.txt y crea su
+# propio entorno virtual con el PATH ya configurado. Solo definimos el
+# comando de arranque.
 [start]
-cmd = "gunicorn app:app --bind 0.0.0.0:$PORT"
+cmd = "gunicorn app:app --bind 0.0.0.0:$PORT --log-file -"
