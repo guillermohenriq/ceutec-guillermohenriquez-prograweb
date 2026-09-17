@@ -20,7 +20,8 @@ CORS(app, resources={
     }
 })
 
-app.config['MYSQL_HOST'] = 'mysql.railway.internal:42540'
+app.config['MYSQL_HOST'] = 'mysql.railway.internal'
+app.config['MYSQL_PORT'] = 3306
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = 'vPrvMDUjyWXzKQjPLyuqfSctaCZIAlDj'
 app.config['MYSQL_DB'] = 'VENTAS'
@@ -29,7 +30,8 @@ db = ConexionDB(
     app.config['MYSQL_HOST'],
     app.config['MYSQL_USER'],
     app.config['MYSQL_PASSWORD'],
-    app.config['MYSQL_DB']
+    app.config['MYSQL_DB'],
+    app.config['MYSQL_PORT']
 )
 
 @app.route('/')
