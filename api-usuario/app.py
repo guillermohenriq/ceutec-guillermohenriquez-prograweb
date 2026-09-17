@@ -24,7 +24,7 @@ app.config['MYSQL_HOST'] = 'mysql.railway.internal'
 app.config['MYSQL_PORT'] = 3306
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = 'vPrvMDUjyWXzKQjPLyuqfSctaCZIAlDj'
-app.config['MYSQL_DB'] = 'VENTAS'
+app.config['MYSQL_DB'] = 'railway'
 
 db = ConexionDB(
     app.config['MYSQL_HOST'],
@@ -42,7 +42,7 @@ def index():
 def listar_usuarios():
     try:
         cursor = db.obtener_cursor()
-        cursor.execute("SELECT idemp, usuario, clave, estado FROM usuario")
+        cursor.execute("SELECT idemp, usuario, clave, estado FROM USUARIO")
         datos=cursor.fetchall()
         usuarios = [{'idemp': row[0], 'usuario': row[1], 'clave': row[2], 'estado': row[3]} for row in datos]
         cursor.close()
@@ -69,7 +69,7 @@ def listar_usuario_por_id(id):
 def leer_usuario_bd_by_id(id):
     try:
         cursor = db.obtener_cursor()
-        cursor.execute("SELECT idemp, usuario, clave, estado FROM usuario WHERE idemp = %s", (id,))
+        cursor.execute("SELECT idemp, usuario, clave, estado FROM USUARIO WHERE idemp = %s", (id,))
         datos = cursor.fetchone()
         if datos != None:
             usuario = {'idemp': datos[0], 'usuario': datos[1], 'clave': datos[2], 'estado': datos[3]}
@@ -88,7 +88,7 @@ def registrar_usuario():
                 return jsonify({'mensaje': "Código ya existe, no se puede duplicar.", 'exito': False})
             else:
                 cursor = db.obtener_cursor()
-                sql = """INSERT INTO usuario (idemp, usuario, clave, estado) 
+                sql = """INSERT INTO USUARIO (idemp, usuario, clave, estado) 
                 VALUES ('{0}', '{1}', '{2}', '{3}')""".format(request.json['idemp'], request.json['usuario'],hashlib.sha1(request.json['clave'].encode('utf-8')).hexdigest(), request.json['estado'])
                 cursor.execute(sql)
                 db.conexion.commit()  # Confirma la acción de inserción.
@@ -107,7 +107,7 @@ def actualizar_usuario(id):
             usuario = leer_usuario_bd_by_id(id)
             if usuario != None:
                 cursor = db.obtener_cursor()
-                sql = """UPDATE usuario SET usuario = '{0}', clave = '{1}' , estado = '{2}' 
+                sql = """UPDATE USUARIO SET usuario = '{0}', clave = '{1}' , estado = '{2}' 
                 WHERE idemp = '{3}'""".format(request.json['usuario'], hashlib.sha1(request.json['clave'].encode('utf-8')).hexdigest(), request.json['estado'], id)
                 cursor.execute(sql)
                 db.conexion.commit()  # Confirma la acción de actualización.
@@ -126,7 +126,7 @@ def eliminar_usuario(id):
         usuario = leer_usuario_bd_by_id(id)
         if usuario != None:
             cursor = db.obtener_cursor()
-            sql = "DELETE FROM usuario WHERE idemp = '{0}'".format(id)
+            sql = "DELETE FROM USUARIO WHERE idemp = '{0}'".format(id)
             cursor.execute(sql)
             db.conexion.commit()  # Confirma la acción de eliminación.
             return jsonify({'mensaje': "Usuario eliminado.", 'exito': True})
@@ -141,7 +141,7 @@ def autenticar_usuario():
     if (request.json['usuario'] and request.json['password']):
         try:
             cursor = db.obtener_cursor()
-            sql = "SELECT  idemp, usuario, clave FROM usuario WHERE usuario = '{0}'".format(request.json['usuario'])
+            sql = "SELECT  idemp, usuario, clave FROM USUARIO WHERE usuario = '{0}'".format(request.json['usuario'])
             cursor.execute(sql)
             datos = cursor.fetchone()
             if datos is None:
