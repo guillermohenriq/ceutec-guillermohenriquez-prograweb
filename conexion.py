@@ -7,6 +7,7 @@ class ConexionDB:
         self.password = password
         self.db = db
         self.conexion = None
+        self.port = 3306  # Puerto por defecto de MySQL
 
     def conectar(self):
         if self.conexion is None or not self.conexion.open:
