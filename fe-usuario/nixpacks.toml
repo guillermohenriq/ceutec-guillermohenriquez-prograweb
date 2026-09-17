@@ -1,0 +1,8 @@
+[phases.setup]
+nixPkgs = ["caddy"]
+
+[phases.build]
+cmds = ["caddy fmt --overwrite Caddyfile"]
+
+[start]
+cmd = "caddy run --config Caddyfile --adapter caddyfile"

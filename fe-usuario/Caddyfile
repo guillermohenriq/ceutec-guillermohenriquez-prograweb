@@ -1,0 +1,18 @@
+{
+	admin off
+	persist_config off
+	auto_https off
+	log {
+		format console
+	}
+	servers {
+		trusted_proxies static private_ranges
+	}
+}
+
+:{$PORT:8080} {
+	root * /app
+	encode gzip
+	try_files {path} {path}.html {path}/
+	file_server
+}

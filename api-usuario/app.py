@@ -1,12 +1,20 @@
 from flask import Flask, jsonify, request
 from conexion import ConexionDB  
 import hashlib
+import os
 from flask_cors import CORS
 
 app = Flask(__name__)
+
+# Origenes permitidos: los locales siempre, mas los que se definan en la
+# variable de entorno CORS_ORIGINS (separados por coma) en Railway.
+origenes = ["http://localhost:5500", "http://127.0.0.1:5500"]
+extra = os.environ.get("CORS_ORIGINS", "")
+origenes += [o.strip() for o in extra.split(",") if o.strip()]
+
 CORS(app, resources={
     r"/*": {
-        "origins": ["http://localhost:5500", "http://127.0.0.1:5500"],
+        "origins": origenes,
         "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
         "allow_headers": ["Content-Type", "Authorization"]
     }
